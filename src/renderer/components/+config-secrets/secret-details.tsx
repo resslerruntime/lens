@@ -28,13 +28,14 @@ import { DrawerItem, DrawerTitle } from "../drawer";
 import { Input } from "../input";
 import { Button } from "../button";
 import { Notifications } from "../notifications";
-import { base64, ObservableToggleSet } from "../../utils";
+import { base64 } from "../../utils";
 import { Icon } from "../icon";
 import { secretsStore } from "./secrets.store";
 import type { KubeObjectDetailsProps } from "../kube-object-details";
 import { Secret } from "../../../common/k8s-api/endpoints";
 import { KubeObjectMeta } from "../kube-object-meta";
 import logger from "../../../common/logger";
+import { toggle } from "../../../common/utils/collection-functions";
 
 interface Props extends KubeObjectDetailsProps<Secret> {
 }
@@ -43,7 +44,7 @@ interface Props extends KubeObjectDetailsProps<Secret> {
 export class SecretDetails extends React.Component<Props> {
   @observable isSaving = false;
   @observable data: { [name: string]: string } = {};
-  revealSecret = new ObservableToggleSet<string>();
+  @observable revealSecret = observable.set<string>();
 
   constructor(props: Props) {
     super(props);
@@ -115,7 +116,7 @@ export class SecretDetails extends React.Component<Props> {
             <Icon
               material={revealSecret ? "visibility" : "visibility_off"}
               tooltip={revealSecret ? "Hide" : "Show"}
-              onClick={() => this.revealSecret.toggle(name)}
+              onClick={() => toggle(this.revealSecret, name)}
             />
           )}
         </div>

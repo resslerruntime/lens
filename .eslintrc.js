@@ -21,6 +21,14 @@
 
 const packageJson = require("./package.json");
 
+function noCycleMaxDepth() {
+  return (
+    process.env.VSCODE_PID && !process.env.GITHUB_ACTIONS && !process.env.LENS_LINT_FULL
+      ? 5 // very fast for editors and default `make lint`
+      : 12 // no fast for CI
+  );
+}
+
 module.exports = {
   ignorePatterns: [
     "**/node_modules/**/*",
@@ -84,7 +92,7 @@ module.exports = {
           { "blankLine": "always", "prev": "*", "next": "function" },
           { "blankLine": "always", "prev": "*", "next": "class" },
           { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
-          { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
+          { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] },
         ]
       }
     },
@@ -95,6 +103,8 @@ module.exports = {
       parser: "@typescript-eslint/parser",
       extends: [
         "plugin:@typescript-eslint/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
       ],
       plugins: [
         "header",
@@ -116,6 +126,10 @@ module.exports = {
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports-ts": process.env.PROD === "true" ? "error" : "warn",
+        "import/no-cycle": [2, {
+          ignoreExternal: true,
+          maxDepth: noCycleMaxDepth(),
+        }],
         "unused-imports/no-unused-vars-ts": [
           "warn", {
             "vars": "all",
@@ -130,7 +144,6 @@ module.exports = {
           "avoidEscape": true,
           "allowTemplateLiterals": true,
         }],
-        "react/prop-types": "off",
         "semi": "off",
         "@typescript-eslint/semi": ["error"],
         "linebreak-style": ["error", "unix"],
@@ -145,7 +158,7 @@ module.exports = {
           { "blankLine": "always", "prev": "*", "next": "function" },
           { "blankLine": "always", "prev": "*", "next": "class" },
           { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
-          { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
+          { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] },
         ]
       },
     },
@@ -161,6 +174,8 @@ module.exports = {
       extends: [
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
       ],
       parserOptions: {
         ecmaVersion: 2018,
@@ -169,6 +184,7 @@ module.exports = {
       },
       rules: {
         "header/header": [2, "./license-header"],
+        "react/prop-types": "off",
         "no-invalid-this": "off",
         "@typescript-eslint/no-invalid-this": ["error"],
         "@typescript-eslint/explicit-function-return-type": "off",
@@ -184,6 +200,10 @@ module.exports = {
         "react/display-name": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports-ts": process.env.PROD === "true" ? "error" : "warn",
+        "import/no-cycle": [2, {
+          ignoreExternal: true,
+          maxDepth: noCycleMaxDepth(),
+        }],
         "unused-imports/no-unused-vars-ts": [
           "warn", {
             "vars": "all",
@@ -198,7 +218,6 @@ module.exports = {
           "avoidEscape": true,
           "allowTemplateLiterals": true,
         }],
-        "react/prop-types": "off",
         "semi": "off",
         "@typescript-eslint/semi": ["error"],
         "linebreak-style": ["error", "unix"],
@@ -213,7 +232,7 @@ module.exports = {
           { "blankLine": "always", "prev": "*", "next": "function" },
           { "blankLine": "always", "prev": "*", "next": "class" },
           { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
-          { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
+          { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] },
         ],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "off"

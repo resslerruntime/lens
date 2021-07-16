@@ -25,7 +25,7 @@ import { sentryDsn } from "../../../common/vars";
 import { AppPreferenceRegistry } from "../../../extensions/registries";
 import { Checkbox } from "../checkbox";
 import { SubTitle } from "../layout/sub-title";
-import { ExtensionSettings } from "./preferences";
+import { ExtensionSettings } from "./extension-settings";
 
 export const Telemetry = observer(() => {
   const extensions = AppPreferenceRegistry.getInstance().getItems();

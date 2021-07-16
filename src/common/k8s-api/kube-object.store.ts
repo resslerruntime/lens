@@ -31,6 +31,9 @@ import { ensureObjectSelfLink, IKubeApiQueryParams, KubeApi } from "./kube-api";
 import { parseKubeApi } from "./kube-api-parse";
 import type { KubeJsonApiData } from "./kube-json-api";
 import type { RequestInit } from "node-fetch";
+
+// BUG: https://github.com/mysticatea/abort-controller/pull/22
+// eslint-disable-next-line import/no-named-as-default
 import AbortController from "abort-controller";
 
 export interface KubeObjectStoreLoadingParams<K extends KubeObject> {

@@ -19,43 +19,24 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Base class for extensions-api registries
-import { action, observable, makeObservable } from "mobx";
-import { Singleton } from "../../common/utils";
-import type { LensExtension } from "../lens-extension";
+import React from "react";
+import type { RegisteredAppPreference } from "../../../extensions/registries";
+import { SubTitle } from "../layout/sub-title";
 
-export class BaseRegistry<T, I = T> extends Singleton {
-  private items = observable.map<T, I>([], { deep: false });
-
-  constructor() {
-    super();
-    makeObservable(this);
-  }
-
-  getItems(): I[] {
-    return Array.from(this.items.values());
-  }
-
-  @action
-  add(items: T | T[], extension?: LensExtension) {
-    const itemArray = [items].flat() as T[];
-
-    itemArray.forEach(item => {
-      this.items.set(item, this.getRegisteredItem(item, extension));
-    });
-
-    return () => this.remove(...itemArray);
-  }
-
-  // eslint-disable-next-line unused-imports/no-unused-vars-ts
-  protected getRegisteredItem(item: T, extension?: LensExtension): I {
-    return item as any;
-  }
-
-  @action
-  remove(...items: T[]) {
-    items.forEach(item => {
-      this.items.delete(item);
-    });
-  }
+/**
+ *
+ */
+export function ExtensionSettings({ title, id, components: { Hint, Input } }: RegisteredAppPreference) {
+  return (
+    <>
+      <section id={id} className="small">
+        <SubTitle title={title} />
+        <Input />
+        <div className="hint">
+          <Hint />
+        </div>
+      </section>
+      <hr className="small" />
+    </>
+  );
 }

@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import MonacoEditor, {monaco} from "react-monaco-editor";
+import MonacoEditor, { monaco } from "react-monaco-editor";
 import React from "react";
 import jsYaml from "js-yaml";
 import { observable, makeObservable } from "mobx";
@@ -28,8 +28,6 @@ import { dockStore, TabId } from "./dock.store";
 import { monacoModelsManager } from "./monaco-model-manager";
 import { ThemeStore } from "../../theme.store";
 import { UserStore } from "../../../common/user-store";
-
-import "monaco-editor";
 
 interface Props {
   className?: string;
@@ -63,7 +61,7 @@ export class EditorPanel extends React.Component<Props> {
   editorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     this.editor = editor;
     const model = monacoModelsManager.getModel(this.props.tabId);
-    
+
     model.setValue(this.props.value ?? "");
     this.editor.setModel(model);
   };

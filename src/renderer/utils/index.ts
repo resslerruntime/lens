@@ -33,8 +33,6 @@ export * from "./createStorage";
 export * from "./interval";
 export * from "./copyToClipboard";
 export * from "./isReactNode";
-export * from "../../common/utils/convertMemory";
-export * from "../../common/utils/convertCpu";
 export * from "./metricUnitsToNumber";
 export * from "./display-booleans";
 export * from "./isMiddleClick";

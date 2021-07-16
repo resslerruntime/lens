@@ -40,10 +40,9 @@ import {
   telemetryRoute,
   telemetryURL,
 } from "../../../common/routes";
-import { AppPreferenceRegistry, RegisteredAppPreference } from "../../../extensions/registries/app-preference-registry";
+import { AppPreferenceRegistry } from "../../../extensions/registries/app-preference-registry";
 import { navigateWithoutHistoryChange, navigation } from "../../navigation";
 import { SettingLayout } from "../layout/setting-layout";
-import { SubTitle } from "../layout/sub-title";
 import { Tab, Tabs } from "../tabs";
 import { Application } from "./application";
 import { Kubernetes } from "./kubernetes";
@@ -104,19 +103,4 @@ export class Preferences extends React.Component {
       </SettingLayout>
     );
   }
-}
-
-export function ExtensionSettings({ title, id, components: { Hint, Input } }: RegisteredAppPreference) {
-  return (
-    <React.Fragment>
-      <section id={id} className="small">
-        <SubTitle title={title}/>
-        <Input/>
-        <div className="hint">
-          <Hint/>
-        </div>
-      </section>
-      <hr className="small"/>
-    </React.Fragment>
-  );
 }

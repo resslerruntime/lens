@@ -22,7 +22,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { AppPreferenceRegistry } from "../../../extensions/registries";
-import { ExtensionSettings } from "./preferences";
+import { ExtensionSettings } from "./extension-settings";
 
 export const Extensions = observer(() => {
   const extensions = AppPreferenceRegistry.getInstance().getItems();

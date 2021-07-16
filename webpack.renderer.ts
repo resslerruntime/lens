@@ -149,14 +149,6 @@ export function webpackLensRenderer({ showVars = true } = {}): webpack.Configura
       new ProgressBarPlugin(),
       new ForkTsCheckerPlugin(),
 
-      // todo: fix remain warnings about circular dependencies
-      // new CircularDependencyPlugin({
-      //   cwd: __dirname,
-      //   exclude: /node_modules/,
-      //   allowAsyncCycles: true,
-      //   failOnError: false,
-      // }),
-
       // todo: check if this actually works in mode=production files
       // new webpack.DllReferencePlugin({
       //   context: process.cwd(),

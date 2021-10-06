@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import type { RequestPromiseOptions } from "request-promise-native";
+import type { OptionsOfJSONResponseBody } from "got";
 import type { Cluster } from "../cluster";
 import { k8sRequest } from "../k8s-request";
 
@@ -28,17 +28,14 @@ export type ClusterDetectionResult = {
   accuracy: number
 };
 
-export class BaseClusterDetector {
-  key: string;
+export abstract class BaseClusterDetector {
+  abstract key: string;
 
-  constructor(public cluster: Cluster) {
-  }
+  constructor(public cluster: Cluster) {}
 
-  detect(): Promise<ClusterDetectionResult> {
-    return null;
-  }
+  abstract detect(): Promise<ClusterDetectionResult>;
 
-  protected async k8sRequest<T = any>(path: string, options: RequestPromiseOptions = {}): Promise<T> {
+  protected async k8sRequest<T = any>(path: string, options: OptionsOfJSONResponseBody = {}): Promise<T> {
     return k8sRequest(this.cluster, path, options);
   }
 }

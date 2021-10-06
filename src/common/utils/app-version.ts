@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import requestPromise from "request-promise-native";
+import got from "got";
 import packageInfo from "../../../package.json";
 
 export function getAppVersion(): string {
@@ -30,13 +30,14 @@ export function getBundledKubectlVersion(): string {
   return packageInfo.config.bundledKubectlVersion;
 }
 
+interface AppVersion {
+  version: string;
+}
+
 export async function getAppVersionFromProxyServer(proxyPort: number): Promise<string> {
-  const response = await requestPromise({
-    method: "GET",
-    uri: `http://127.0.0.1:${proxyPort}/version`,
-    resolveWithFullResponse: true,
-    proxy: undefined,
+  const { body } = await got<AppVersion>(`http://localhost:${proxyPort}/version`, {
+    responseType: "json",
   });
 
-  return JSON.parse(response.body).version;
+  return body.version;
 }

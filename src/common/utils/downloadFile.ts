@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import request from "request";
+import got from "got";
 
 export interface DownloadFileOptions {
   url: string;
@@ -35,7 +35,11 @@ export interface DownloadFileTicket<T> {
 
 export function downloadFile({ url, timeout, gzip = true }: DownloadFileOptions): DownloadFileTicket<Buffer> {
   const fileChunks: Buffer[] = [];
-  const req = request(url, { gzip, timeout });
+  const req = got.stream({
+    url,
+    timeout,
+    decompress: gzip,
+  });
   const promise: Promise<Buffer> = new Promise((resolve, reject) => {
     req.on("data", (chunk: Buffer) => {
       fileChunks.push(chunk);
@@ -52,8 +56,8 @@ export function downloadFile({ url, timeout, gzip = true }: DownloadFileOptions)
     url,
     promise,
     cancel() {
-      req.abort();
-    }
+      req.destroy();
+    },
   };
 }
 

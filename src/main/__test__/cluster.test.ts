@@ -47,7 +47,6 @@ jest.mock("winston", () => ({
 jest.mock("../../common/ipc");
 jest.mock("../context-handler");
 jest.mock("request");
-jest.mock("request-promise-native");
 
 import { Console } from "console";
 import mockFs from "mock-fs";
@@ -114,7 +113,6 @@ describe("create clusters", () => {
   });
 
   it("activating cluster should try to connect to cluster and do a refresh", async () => {
-
     const c = new class extends Cluster {
       // only way to mock protected methods, without these we leak promises
       protected bindEvents() {

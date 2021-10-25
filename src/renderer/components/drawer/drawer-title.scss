@@ -24,3 +24,8 @@
   margin: $margin * 3 (-$margin * 3);
   background: $drawerSubtitleBackground;
 }
+
+.DrawerSubTitle {
+  padding: $padding $padding * 2;
+  background: $drawerSubtitleBackground;
+}

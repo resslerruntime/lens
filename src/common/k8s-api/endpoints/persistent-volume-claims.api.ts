@@ -47,26 +47,34 @@ export interface IPvcMetrics<T = IMetrics> {
   diskCapacity: T;
 }
 
-export interface PersistentVolumeClaim {
-  spec: {
-    accessModes: string[];
-    storageClassName: string;
-    selector: {
-      matchLabels: {
-        release: string;
-      };
-      matchExpressions: {
-        key: string; // environment,
-        operator: string; // In,
-        values: string[]; // [dev]
-      }[];
+export interface PersistentVolumeClaimSpec {
+  accessModes: string[];
+  selector: {
+    matchLabels: {
+      release: string;
     };
-    resources: {
-      requests: {
-        storage: string; // 8Gi
-      };
-    };
+    matchExpressions: {
+      key: string; // environment,
+      operator: string; // In,
+      values: string[]; // [dev]
+    }[];
   };
+  resources: {
+    requests?: Record<string, string>;
+    limits?: Record<string, string>;
+  };
+  volumeName?: string;
+  storageClassName?: string;
+  volumeMode?: string;
+  dataSource?: {
+    apiGroup: string;
+    kind: string;
+    name: string;
+  };
+}
+
+export interface PersistentVolumeClaim {
+  spec: PersistentVolumeClaimSpec;
   status: {
     phase: string; // Pending
   };

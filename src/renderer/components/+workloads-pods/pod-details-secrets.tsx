@@ -34,20 +34,20 @@ interface Props {
 
 @observer
 export class PodDetailsSecrets extends Component<Props> {
-  @observable secrets: Map<string, Secret> = observable.map<string, Secret>();
+  @observable secrets = observable.map<string, Secret>();
 
   @disposeOnUnmount
   secretsLoader = autorun(async () => {
     const { pod } = this.props;
 
-    const secrets = await Promise.all(
+    const secrets = (await Promise.all(
       pod.getSecrets().map(secretName => secretsApi.get({
         name: secretName,
         namespace: pod.getNs(),
       }))
-    );
+    )).filter(Boolean);
 
-    secrets.forEach(secret => secret && this.secrets.set(secret.getName(), secret));
+    this.secrets.replace(secrets.map(secret => [secret.getName(), secret]));
   });
 
   constructor(props: Props) {
@@ -60,28 +60,22 @@ export class PodDetailsSecrets extends Component<Props> {
 
     return (
       <div className="PodDetailsSecrets">
-        {
-          pod.getSecrets().map(secretName => {
-            const secret = this.secrets.get(secretName);
-
-            if (secret) {
-              return this.renderSecretLink(secret);
-            } else {
-              return (
-                <span key={secretName}>{secretName}</span>
-              );
-            }
-          })
-        }
+        {pod.getSecrets().map(this.renderSecret)}
       </div>
     );
   }
 
-  protected renderSecretLink(secret: Secret) {
+  protected renderSecret = (name: string) => {
+    const secret = this.secrets.get(name);
+
+    if (!secret) {
+      return <span key={name}>{name}</span>;
+    }
+
     return (
       <Link key={secret.getId()} to={getDetailsUrl(secret.selfLink)}>
         {secret.getName()}
       </Link>
     );
-  }
+  };
 }

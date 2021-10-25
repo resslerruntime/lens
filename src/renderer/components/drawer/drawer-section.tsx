@@ -20,32 +20,45 @@
  */
 
 import React from "react";
-import { DrawerItem, DrawerItemProps } from "./drawer-item";
-import { Badge } from "../badge";
-import { KubeObject } from "../../../common/k8s-api/kube-object";
+import { DrawerSubTitle } from ".";
+import { DrawerTitle } from "./drawer-title";
 
-export interface DrawerItemLabelsProps extends DrawerItemProps {
-  labels: string[] | Record<string, string>;
+export interface DrawerSectionProps {
+  className?: string;
+  title?: React.ReactNode;
+  hidden?: boolean;
 }
 
-export function DrawerItemLabels(props: DrawerItemLabelsProps) {
-  const { labels, ...itemProps } = props;
+export class DrawerSection extends React.Component<DrawerSectionProps> {
+  render() {
+    const { title, children, className, hidden } = this.props;
 
-  if (!labels || typeof labels !== "object") {
-    return null;
+    if (hidden) {
+      return null;
+    }
+
+    return (
+      <>
+        <DrawerTitle className={className} title={title} />
+        {children}
+      </>
+    );
   }
+}
 
-  const labelStrings = Array.isArray(labels)
-    ? labels
-    : KubeObject.stringifyLabels(labels);
+export class DrawerSubSection extends React.Component<DrawerSectionProps> {
+  render() {
+    const { title, children, className, hidden } = this.props;
 
-  if (labelStrings.length === 0) {
-    return null;
+    if (hidden) {
+      return null;
+    }
+
+    return (
+      <>
+        <DrawerSubTitle className={className} title={title} />
+        {children}
+      </>
+    );
   }
-
-  return (
-    <DrawerItem {...itemProps} labelsOnly>
-      {labelStrings.map(label => <Badge key={label} label={label} title={label}/>)}
-    </DrawerItem>
-  );
 }

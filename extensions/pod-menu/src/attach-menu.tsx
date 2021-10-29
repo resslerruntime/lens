@@ -55,12 +55,12 @@ export class PodAttachMenu extends React.Component<PodAttachMenuProps> {
     }
 
     const shell = createTerminalTab({
-      title: `Pod: ${pod.getName()} (namespace: ${pod.getNs()}) [Attached]`
+      title: `Pod: ${pod.getName()} (namespace: ${pod.getNs()}) [Attached]`,
     });
 
     terminalStore.sendCommand(command, {
       enter: true,
-      tabId: shell.id
+      tabId: shell.id,
     });
     
     Navigation.hideDetails();

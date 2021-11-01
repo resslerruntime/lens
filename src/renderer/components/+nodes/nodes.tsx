@@ -56,6 +56,13 @@ enum columnId {
 interface Props extends RouteComponentProps<NodesRouteParams> {
 }
 
+interface UsageArgs {
+  node: Node;
+  title: string;
+  metricNames: [string, string];
+  secondFormater: (metrics: [number, number]) => string;
+}
+
 @observer
 export class Nodes extends React.Component<Props> {
   @observable.ref metrics: Partial<INodeMetrics> = {};
@@ -98,7 +105,7 @@ export class Nodes extends React.Component<Props> {
     });
   }
 
-  renderUsage(node: Node, title: string, metricNames: [string, string], secondFormater: (metrics: [number, number]) => string) {
+  private renderUsage({ node, title, metricNames, secondFormater }: UsageArgs) {
     const metrics = this.getLastMetricValues(node, metricNames);
 
     if (!metrics || metrics.length < 2) {
@@ -120,15 +127,30 @@ export class Nodes extends React.Component<Props> {
   }
 
   renderCpuUsage(node: Node) {
-    return this.renderUsage(node, "CPU", ["cpuUsage", "cpuCapacity"], ([,cap]) => `cores: ${cap}`);
+    return this.renderUsage({
+      node,
+      title: "CPU",
+      metricNames: ["cpuUsage", "cpuCapacity"],
+      secondFormater: ([, cap]) => `cores: ${cap}`,
+    });
   }
 
   renderMemoryUsage(node: Node) {
-    return this.renderUsage(node, "Memory", ["workloadMemoryUsage", "memoryAllocatableCapacity"], ([usage]) => bytesToUnits(usage, 3));
+    return this.renderUsage({
+      node,
+      title: "Memory",
+      metricNames: ["workloadMemoryUsage", "memoryAllocatableCapacity"],
+      secondFormater: ([usage]) => bytesToUnits(usage, 3),
+    });
   }
 
   renderDiskUsage(node: Node): any {
-    return this.renderUsage(node, "Disk", ["fsUsage", "fsSize"], ([usage]) => bytesToUnits(usage, 3));
+    return this.renderUsage({
+      node,
+      title: "Disk",
+      metricNames: ["fsUsage", "fsSize"],
+      secondFormater: ([usage]) => bytesToUnits(usage, 3),
+    });
   }
 
   renderConditions(node: Node) {

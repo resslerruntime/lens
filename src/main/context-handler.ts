@@ -146,7 +146,7 @@ export class ContextHandler {
         proxyEnv.HTTPS_PROXY = this.cluster.preferences.httpsProxy;
       }
       this.kubeAuthProxy = new KubeAuthProxy(this.cluster, proxyEnv);
-      this.kubeAuthProxy.run();
+      await this.kubeAuthProxy.run();
     }
 
     await this.kubeAuthProxy.whenReady;
